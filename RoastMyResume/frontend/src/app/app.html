@@ -1,0 +1,14 @@
+<div style="max-width: 700px; margin: 0 auto; padding: 2rem;">
+  <h1>🔥 Roast My Resume</h1>
+
+  <input type="file" (change)="onFileSelected($event)" accept=".pdf,.docx" />
+
+  <button (click)="uploadFile()" style="margin-top: 1rem;" [disabled]="!selectedFile">
+    Roast Me
+  </button>
+
+  <div *ngIf="roastResult" style="margin-top: 2rem; background: #f4f4f4; padding: 1rem;">
+    <h3>Your Roast:</h3>
+    <p>{{ roastResult }}</p>
+  </div>
+</div>
