@@ -9,6 +9,8 @@ using UglyToad.PdfPig.Content;          // For PDF
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
+using backend.Models;
+
 
 namespace backend.Controllers
 {
@@ -16,21 +18,44 @@ namespace backend.Controllers
     [ApiController]
     public class RoastController : ControllerBase
     {
-        [HttpPost]
-        public async Task<IActionResult> RoastResume([FromForm] IFormFile file)
+
+        [HttpGet("ping")]
+        public IActionResult Ping()
         {
-            if (file == null || file.Length == 0)
-                return BadRequest(new { error = "No file uploaded." });
-
-            string extractedText = await ExtractText(file);
-
-            if (string.IsNullOrWhiteSpace(extractedText))
-                return BadRequest(new { error = "Could not extract text from the file." });
-
-            string roast = await GetRoastFromOpenAI(extractedText);
-
-            return Ok(new { roast });
+            return Ok("Roast controller is alive");
         }
+
+        [HttpPost]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> RoastResume([FromForm] RoastRequest request)
+        {
+            try
+            {
+                var file = request.File;
+
+                if (file == null || file.Length == 0)
+                    return BadRequest(new { error = "No file uploaded." });
+
+                string extractedText = await ExtractText(file);
+
+                if (string.IsNullOrWhiteSpace(extractedText))
+                    return BadRequest(new { error = "Could not extract text from the file." });
+
+                string roast = await GetRoastFromGroq(extractedText);
+
+                return Ok(new { roast });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    error = "Exception occurred",
+                    message = ex.Message,
+                    stack = ex.StackTrace
+                });
+            }
+        }
+
 
         private async Task<string> ExtractText(IFormFile file)
         {
@@ -60,27 +85,31 @@ namespace backend.Controllers
             }
         }
 
-        private async Task<string> GetRoastFromOpenAI(string resumeText)
+        private async Task<string> GetRoastFromGroq(string resumeText)
         {
             string prompt = $"Roast this resume like a sarcastic stand-up comic. Be brutally honest but funny:\n\n{resumeText}";
 
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "YOUR_OPENAI_API_KEY");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
 
             var requestBody = new
             {
-                model = "gpt-3.5-turbo",
+                model = "llama3-70b-8192",
+
                 messages = new[]
                 {
-                    new { role = "user", content = prompt }
-                }
+            new { role = "user", content = prompt }
+        }
             };
 
-            var response = await client.PostAsync("https://api.openai.com/v1/chat/completions",
+            var response = await client.PostAsync("https://api.groq.com/openai/v1/chat/completions",
                 new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json"));
 
             if (!response.IsSuccessStatusCode)
-                return "Error: OpenAI API call failed.";
+            {
+                var errorText = await response.Content.ReadAsStringAsync();
+                return $"Groq Error: {response.StatusCode} - {errorText}";
+            }
 
             using var stream = await response.Content.ReadAsStreamAsync();
             using var doc = await JsonDocument.ParseAsync(stream);
@@ -91,5 +120,6 @@ namespace backend.Controllers
                       .GetProperty("content")
                       .GetString();
         }
+
     }
 }

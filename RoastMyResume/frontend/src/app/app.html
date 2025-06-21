@@ -1,14 +1,19 @@
-<div style="max-width: 700px; margin: 0 auto; padding: 2rem;">
-  <h1>🔥 Roast My Resume</h1>
+<h1 class="text-2xl font-bold mb-4">Roast My Resume</h1>
 
-  <input type="file" (change)="onFileSelected($event)" accept=".pdf,.docx" />
-
-  <button (click)="uploadFile()" style="margin-top: 1rem;" [disabled]="!selectedFile">
+<form (ngSubmit)="uploadResume()" #resumeForm="ngForm">
+  <input
+    type="file"
+    name="resume"
+    accept=".pdf,.docx"
+    (change)="onFileSelected($event)"
+    required
+  />
+  <button type="submit" [disabled]="!selectedFile" class="mt-4">
     Roast Me
   </button>
+</form>
 
-  <div *ngIf="roastResult" style="margin-top: 2rem; background: #f4f4f4; padding: 1rem;">
-    <h3>Your Roast:</h3>
-    <p>{{ roastResult }}</p>
-  </div>
+<div *ngIf="roastResult" class="mt-6 bg-gray-100 p-4 rounded">
+  <h2 class="font-bold text-lg mb-2">Roast Result</h2>
+  <pre>{{ roastResult }}</pre>
 </div>

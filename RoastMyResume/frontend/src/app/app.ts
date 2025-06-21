@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { NgIf } from '@angular/common';
-
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [NgIf],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  imports: [CommonModule, FormsModule, HttpClientModule],
 })
-export class App {
+export class AppComponent {
   selectedFile: File | null = null;
-  roastResult = '';
+  roastResult: string = '';
 
   constructor(private http: HttpClient) {}
 
@@ -19,21 +18,21 @@ export class App {
     this.selectedFile = event.target.files[0];
   }
 
-  uploadFile() {
+  uploadResume() {
     if (!this.selectedFile) return;
 
     const formData = new FormData();
-    formData.append('file', this.selectedFile);
+    formData.append('File', this.selectedFile); // 'File' must match the backend model
 
-    this.http.post<any>('https://localhost:5001/api/roast', formData)
+    this.http
+      .post<any>('https://localhost:5001/api/Roast', formData)
       .subscribe({
-        next: (res) => {
-          this.roastResult = res.roast;
+        next: (response) => {
+          this.roastResult = response.roast;
         },
         error: (err) => {
-          console.error(err);
-          alert('Error uploading file or getting roast.');
-        }
+          this.roastResult = `Error: ${err.error?.message || 'Upload failed'}`;
+        },
       });
   }
 }

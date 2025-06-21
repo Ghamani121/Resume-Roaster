@@ -1,11 +1,29 @@
+using Microsoft.OpenApi.Models;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Roast My Resume API",
+        Version = "v1",
+        Description = "Uploads resumes and roasts them using LLMs from Groq"
+    });
+
+    // Ensure correct rendering for file uploads
+    c.MapType<IFormFile>(() => new OpenApiSchema
+    {
+        Type = "string",
+        Format = "binary"
+    });
+
+    // Enable annotation support
+    c.EnableAnnotations();
+});
 
 var app = builder.Build();
 
@@ -13,11 +31,17 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    // This is key: serve Swagger UI with explicit config
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Roast My Resume API v1");
+        c.RoutePrefix = "swagger"; // Makes /swagger the default Swagger UI route
+        c.ConfigObject.AdditionalItems["syntaxHighlight"] = false;
+        c.ConfigObject.AdditionalItems["tryItOutEnabled"] = true;
+    });
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();
