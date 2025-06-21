@@ -9,3 +9,4 @@ obj/
 # Secrets
 appsettings.*.json
 .env
+.vs/
