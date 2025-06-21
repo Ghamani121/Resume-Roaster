@@ -49,9 +49,7 @@ namespace backend.Controllers
             {
                 return StatusCode(500, new
                 {
-                    error = "Exception occurred",
-                    message = ex.Message,
-                    stack = ex.StackTrace
+                    roast = $"Backend error: {ex.Message}"
                 });
             }
         }
