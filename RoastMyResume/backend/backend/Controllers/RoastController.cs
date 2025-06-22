@@ -25,21 +25,22 @@ namespace backend.Controllers
             return Ok("Roast controller is alive");
         }
 
+
         [HttpPost]
         [Consumes("multipart/form-data")]
-        public async Task<IActionResult> RoastResume([FromForm] RoastRequest request)
+        public async Task<IActionResult> RoastResume([FromForm] IFormFile File)
         {
             try
             {
-                var file = request.File;
+                if (File == null || File.Length == 0)
+                    return BadRequest(new { roast = "No file uploaded." });
 
-                if (file == null || file.Length == 0)
-                    return BadRequest(new { error = "No file uploaded." });
+                Console.WriteLine($"Received file: {File.FileName}");
 
-                string extractedText = await ExtractText(file);
+                string extractedText = await ExtractText(File);
 
                 if (string.IsNullOrWhiteSpace(extractedText))
-                    return BadRequest(new { error = "Could not extract text from the file." });
+                    return BadRequest(new { roast = "Could not extract text from the file." });
 
                 string roast = await GetRoastFromGroq(extractedText);
 
@@ -47,13 +48,10 @@ namespace backend.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new
-                {
-                    roast = $"Backend error: {ex.Message}"
-                });
+                Console.WriteLine("Exception: " + ex.Message);
+                return StatusCode(500, new { roast = $"Backend error: {ex.Message}" });
             }
         }
-
 
         private async Task<string> ExtractText(IFormFile file)
         {

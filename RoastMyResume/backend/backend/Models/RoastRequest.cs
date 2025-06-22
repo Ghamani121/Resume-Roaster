@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,8 +7,7 @@ namespace backend.Models
 {
     public class RoastRequest
     {
-        [Required]
-        [SwaggerSchema("Upload a resume in PDF or DOCX format")]
+        [FromForm(Name = "File")]
         public IFormFile File { get; set; }
     }
 }
