@@ -1,0 +1,121 @@
+/* Ensure html also has full height and dark background */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #1e1e1e;  /* or your desired color */
+  font-family: 'Segoe UI', sans-serif;
+  color: #e0e0e0;
+}
+
+/* Optional: remove scrollbars if you want a super clean look */
+body {
+  overflow-x: hidden;
+}
+
+
+.container {
+  max-width: 1250px;
+  margin: 5vh auto;
+  padding: 2rem;
+  background-color: #1e1e1e;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 255, 150, 0.2);
+  text-align: center;
+}
+
+h1 {
+  color: #00ffc3;
+  margin-bottom: 1.5rem;
+}
+
+/* File Upload Styles */
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+/* Hide the native input */
+input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+  z-index: -1;
+}
+
+/* Custom styled label that looks like a button */
+.custom-file-label {
+  background-color: #facd48; /* yellow */
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  display: inline-block;
+}
+
+.custom-file-label:hover {
+  background-color: #ffca2c;
+}
+
+/* Message shown when no file is selected */
+.no-file {
+  color: white;
+  font-style: italic;
+  margin-top: 0.5rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* Display selected file name */
+.file-name {
+  margin-top: 0.5rem;
+  color: #00ffc3;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}
+
+/* Roast Button */
+button {
+  background-color: #ff4081;
+  border: none;
+  padding: 0.7rem 1.2rem;
+  font-size: 1rem;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff1a66;
+}
+
+/* Loading Text */
+.loading {
+  color: #ffa500;
+  font-style: italic;
+}
+
+/* Result Box */
+.result-box {
+  background-color: #2b2b2b;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 8px;
+  border: 1px solid #00ffc3;
+  text-align: left;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: #fff;
+}

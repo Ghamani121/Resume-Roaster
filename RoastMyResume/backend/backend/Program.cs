@@ -2,6 +2,15 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngularDevClient",
+        policy => policy.WithOrigins("http://localhost:4200")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -29,6 +38,8 @@ builder.WebHost.UseUrls("http://0.0.0.0:80");
 
 
 var app = builder.Build();
+
+app.UseCors("AllowAngularDevClient");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

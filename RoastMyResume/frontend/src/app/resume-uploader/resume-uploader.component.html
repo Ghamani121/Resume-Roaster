@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Roast My Resume</h1>
+
+<div class="file-upload">
+  <label for="fileInput" class="custom-file-label">Choose File</label>
+  <input type="file" id="fileInput" (change)="onFileSelected($event)" />
+
+  <div *ngIf="!selectedFile" class="no-file">No file chosen</div>
+  <div *ngIf="selectedFile" class="file-name">Selected: {{ selectedFile.name }}</div>
+</div>
+
+
+  <button *ngIf="selectedFile && !isLoading" (click)="onRoast()">Roast It </button>
+  <p *ngIf="isLoading" class="loading">Roasting... please wait...</p>
+
+  <div *ngIf="roastResult" class="result-box">
+    <h3>Roast Result</h3>
+    <pre>{{ roastResult }}</pre>
+  </div>
+</div>
