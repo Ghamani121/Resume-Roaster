@@ -1,4 +1,4 @@
-Roast My Resume
+#### **Roast My Resume**
 
 Roast My Resume is a fun and interactive web app that lets users upload their resume and receive a humorous AI-powered roast using LLMs like LLaMA 3 (via Groq or alternatives). Whether you're prepping for interviews or just want a laugh, this app brings lighthearted critique to your CV.
 
