@@ -2,7 +2,7 @@
   <h1>Roast My Resume</h1>
 
 <div class="file-upload">
-  <label for="fileInput" class="custom-file-label">Choose File</label>
+  <label for="fileInput" class="custom-file-label">Choose File (pdf/doc)</label>
   <input type="file" id="fileInput" (change)="onFileSelected($event)" />
 
   <div *ngIf="!selectedFile" class="no-file">No file chosen</div>

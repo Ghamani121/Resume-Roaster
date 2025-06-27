@@ -33,6 +33,7 @@ export class ResumeUploaderComponent {
 
     this.isLoading = true;
 
+    // this.http.post<{ roast: string }>('http://localhost/api/roast', formData)
     this.http.post<{ roast: string }>('https://roastmyresume-api-exfsfgg5bneag6ab.southindia-01.azurewebsites.net/api/roast', formData)
       .subscribe({
         next: (response) => {
@@ -41,7 +42,7 @@ export class ResumeUploaderComponent {
         },
         error: (err) => {
           console.error('Upload failed:', err);
-          this.roastResult = 'Something went wrong! 😢';
+          this.roastResult = 'Something went wrong!';
           this.isLoading = false;
         }
       });

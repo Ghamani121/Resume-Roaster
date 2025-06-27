@@ -86,11 +86,11 @@ namespace backend.Controllers
             string prompt = $"Roast this resume like a sarcastic stand-up comic. Be brutally honest but funny:\n\n{resumeText}";
 
             using var client = new HttpClient();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "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");
 
             var requestBody = new
             {
-                model = "llama3-70b-8192",
+                model = "llama-3.3-70b-versatile",
 
                 messages = new[]
                 {
